@@ -25,74 +25,43 @@ Built with C# using ASP.NET Core, Blazor WebAssembly, and a modular architecture
 
 ---
 
-## 🧠 Matching Algorithm (for AI/CoPilot)
+## 🏭 Production Setup
 
-```plaintext
-- Match users based on shared interests and age proximity.
-- Prefer matches in the same campus or city.
-- Each user has a score based on profile completeness and activity.
-- Suggested matches are ranked by compatibility score.
-```
-
----
-
-## 🧰 Tech Stack
-
-| Layer       | Technology                      |
-|-------------|----------------------------------|
-| Frontend    | Blazor WebAssembly               |
-| Backend     | ASP.NET Core Web API             |
-| Database    | SQLite + EF Core                 |
-| Authentication | OAuth 2.0 (Google, Microsoft) |
-| Hosting     | Azure App Service                |
-| Dev Tools   | Visual Studio / VS Code, GitHub  |
+- Use `appsettings.Production.json` for production secrets and connection strings.
+- Set `ASPNETCORE_ENVIRONMENT=Production` when deploying.
+- Set real OAuth credentials and a strong `TokenKey`.
+- Restrict CORS to your production client domain in `ClientUrl`.
+- Run EF Core migrations before first launch:
+  ```bash
+  dotnet ef database update --project src/VibesAndChill.API
+  ```
+- For Azure or cloud hosting, update connection strings and storage paths as needed.
 
 ---
 
-## 🧱 Modular Architecture
-
-This project is structured into **modular layers** for clean separation of concerns and easier testing:
-
-- `Client/` – Blazor WebAssembly project for UI
-- `Server/` – ASP.NET Core project for APIs and services
-- `Shared/` – DTOs and models shared between client and server
-- `Data/` – Entity Framework Core context and migrations
-- `Auth/` – OAuth logic, tokens, and claims
-
-### Key Concepts
-
-- **Dependency Injection (DI):** All services are registered using .NET Core’s built-in DI container.
-- **Separation of Concerns:** UI, business logic, and data access are isolated.
-- **DTO Mapping:** Automapper (optional) used for mapping between entities and DTOs.
-
----
-
-## 📁 Folder Structure
+## 🧱 Folder Structure
 
 ```bash
-vibes-and-chill/
-├── Client/                 # Blazor WebAssembly frontend
-│   ├── Pages/             # Razor pages (Home, Register, Match)
-│   ├── Services/          # API services for data communication
-│   └── Shared/            # Components shared across pages
-│
-├── Server/                 # ASP.NET Core backend
-│   ├── Controllers/       # API endpoints
-│   ├── Services/          # Business logic and helpers
-│   ├── Data/              # DB context and seed logic
-│   └── Models/            # EF Core data models
-│
-├── Shared/                 # Shared models between frontend/backend
-│   └── DTOs/              # Data Transfer Objects
-│
-├── Auth/                   # OAuth and authentication configs
-│   ├── ExternalProviders/ # Google, Microsoft auth
-│   └── Middleware/        # Custom auth handlers
-│
-├── .github/                # GitHub workflows (future)
-├── README.md               # You're here!
-└── VibesAndChill.sln       # Visual Studio Solution file
+Vibes-Chill/
+├── src/
+│   ├── VibesAndChill.Client/   # Blazor WebAssembly frontend
+│   ├── VibesAndChill.API/      # ASP.NET Core backend
+│   └── VibesAndChill.Shared/   # Shared models and DTOs
+├── .gitignore
+├── README.md
+└── VibesAndChill.sln
 ```
+
+---
+
+## 🛡️ Security & Privacy
+
+- OAuth 2.0 ensures secure authentication.
+- Never commit secrets or production keys to source control.
+- Use HTTPS in production.
+- Data is stored locally with SQLite; future support for secure cloud storage.
+- Users can report and block others.
+- Planned support for GDPR-compliant data removal.
 
 ---
 
@@ -109,21 +78,21 @@ Open `VibesAndChill.sln` in Visual Studio or VS Code.
 
 ### 3. Run the Server
 ```bash
-cd Server
+cd src/VibesAndChill.API
  dotnet run
 ```
 
 ### 4. Run the Client
 ```bash
-cd Client
+cd src/VibesAndChill.Client
  dotnet run
 ```
 
 ### 5. Database Initialization
 ```bash
-cd Server
-dotnet ef migrations add InitialCreate
-dotnet ef database update
+cd src/VibesAndChill.API
+dotnet ef migrations add InitialCreate # Only once
+ dotnet ef database update
 ```
 
 ---
@@ -138,33 +107,10 @@ dotnet ef database update
 
 ---
 
-## 🛡️ Security & Privacy
-
-- OAuth 2.0 ensures secure authentication.
-- Data is stored locally with SQLite; future support for secure cloud storage.
-- Users can report and block others.
-- Planned support for GDPR-compliant data removal.
-
----
-
 ## 👥 Contributors
 
 - **@LanreAdetola** – Developer & Maintainer  
 - Contributions welcome! See `CONTRIBUTING.md` for more info.
-
----
-
-## 🔍 Suggested Additional Files
-
-You can include these in the root for full project initialization:
-
-- `.editorconfig` – Code style rules
-- `.gitignore` – Ignore build/output/user-specific files
-- `CONTRIBUTING.md` – Guidelines for contributing
-- `LICENSE` – MIT or your preferred license
-- `launchSettings.json` – Debug configuration
-- `appsettings.json` – App-wide configuration
-- `DbInitializer.cs` – Seed demo data on startup
 
 ---
 

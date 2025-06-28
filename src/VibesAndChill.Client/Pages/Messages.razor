@@ -1,0 +1,35 @@
+@page "/messages/{userId}"
+@inject HttpClient Http
+@using VibesAndChill.Shared.Models
+
+<MudPaper Class="pa-4 mx-auto" MaxWidth="600px">
+    <MudText Typo="Typo.h5">Messages</MudText>
+    <MudList>
+        @if (messages != null)
+        {
+            foreach (var msg in messages)
+            {
+                <MudListItem>@msg.Content (@msg.DateSent.ToShortTimeString())</MudListItem>
+            }
+        }
+    </MudList>
+    <MudTextField @bind-Value="newMessage" Label="Type a message..." />
+    <MudButton OnClick="SendMessage" Color="Color.Primary">Send</MudButton>
+</MudPaper>
+
+@code {
+    [Parameter] public string userId { get; set; }
+    List<Message> messages = new();
+    string newMessage;
+    protected override async Task OnInitializedAsync()
+    {
+        messages = await Http.GetFromJsonAsync<List<Message>>($"api/messages/with/{userId}");
+    }
+    async Task SendMessage()
+    {
+        var msg = new Message { RecipientId = userId, Content = newMessage };
+        await Http.PostAsJsonAsync("api/messages", msg);
+        messages = await Http.GetFromJsonAsync<List<Message>>($"api/messages/with/{userId}");
+        newMessage = string.Empty;
+    }
+}

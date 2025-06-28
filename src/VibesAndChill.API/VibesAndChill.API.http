@@ -1,0 +1,6 @@
+@VibesAndChill.API_HostAddress = http://localhost:5286
+
+GET {{VibesAndChill.API_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###

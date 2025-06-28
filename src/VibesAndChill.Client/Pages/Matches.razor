@@ -1,0 +1,24 @@
+@page "/matches"
+@inject HttpClient Http
+@using VibesAndChill.Shared.Models
+
+<MudPaper Class="pa-4 mx-auto" MaxWidth="600px">
+    <MudText Typo="Typo.h5">My Matches</MudText>
+    <MudList>
+        @if (matches != null)
+        {
+            foreach (var match in matches)
+            {
+                <MudListItem>@match.UserId1 - @match.UserId2</MudListItem>
+            }
+        }
+    </MudList>
+</MudPaper>
+
+@code {
+    List<UserMatch> matches = new();
+    protected override async Task OnInitializedAsync()
+    {
+        matches = await Http.GetFromJsonAsync<List<UserMatch>>("api/matches");
+    }
+}
